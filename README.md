@@ -1,2 +1,2 @@
 # Lithium
-The 2D-platformer Lithium
+A 2D-platformer Lithium
