@@ -50,3 +50,15 @@ TagManager:
   - name: Background2
     uniqueID: 545871721
     locked: 0
+  - name: Environment1
+    uniqueID: 4275894565
+    locked: 0
+  - name: Environment2
+    uniqueID: 543181485
+    locked: 0
+  - name: Environment3
+    uniqueID: 2206006063
+    locked: 0
+  - name: Character
+    uniqueID: 400672543
+    locked: 0
