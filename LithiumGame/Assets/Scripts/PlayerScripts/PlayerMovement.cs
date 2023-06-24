@@ -1,47 +1,62 @@
-using System.Collections;
+    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    
-    public float moveSpeed = 5f;
-    private Vector3 targetPosition;
-    private bool isMoving;
+    public Rigidbody2D rb;
+    public int maxEnergy;
+    public int currentEnergy;
 
-    private void Update()
+    private Vector3 mouseDirection;
+
+    public bool canDash = true;
+    public bool isDashing = false;
+    public float dashVelocity;
+    private float dashDuration;
+    public float dashMaxDuration;
+
+    void Start()
     {
-        if (Input.GetMouseButtonDown(0))
+        currentEnergy = maxEnergy;
+    }
+
+    //Metod för att återställa energin för rörelseförmågor
+    public void GainEnergy (int amount)
+    {
+        currentEnergy += amount;
+        if(currentEnergy > maxEnergy)
         {
-            // Get the mouse position in world coordinates
-            targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            targetPosition.z = 0f; // Ensure the z-coordinate is set to 0 for 2D movement
+            currentEnergy = maxEnergy;
+        }
+    }
 
-            // Calculate the direction to move towards the target position
-            Vector3 direction = (targetPosition - transform.position).normalized;
-
-            // Start moving the character
-            isMoving = true;
+    void Update()
+    {
+        //Sätt igång "dash" om spelaren klickar på q
+        if(Input.GetKeyDown("q") && canDash && currentEnergy>=2)
+        {
+            isDashing = true;
+            //Sätt riktningen på dashen till 
+            mouseDirection = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition).normalized;
+            mouseDirection.z = 0;
+            currentEnergy -= 2;
+            dashDuration = 0;
+            Debug.Log("Player is dashing in the direction of" + mouseDirection);
         }
 
-        if (isMoving)
+        if (isDashing)
         {
-            // Calculate the distance to the target position
-            float distance = Vector3.Distance(transform.position, targetPosition);
-
-            if (distance > 0.1f)
+            rb.velocity = mouseDirection * dashVelocity;
+            dashDuration += Time.deltaTime;
+            
+            if( dashDuration >= dashMaxDuration)
             {
-                // Move the character towards the target position
-                transform.position += (targetPosition - transform.position).normalized * moveSpeed * Time.deltaTime;
-            }
-            else
-            {
-                // Stop moving when the target position is reached
-                isMoving = false;
+                isDashing=false;
             }
         }
     }
 
-
+    
 
 }
