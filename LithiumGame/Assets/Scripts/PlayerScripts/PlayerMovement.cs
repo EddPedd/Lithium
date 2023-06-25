@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
         {
             currentEnergy = maxEnergy;
         }
+        Debug.Log("CurrentEnergy =" +  currentEnergy);
     }
 
     void Update()
@@ -37,24 +38,38 @@ public class PlayerMovement : MonoBehaviour
         if(Input.GetKeyDown("q") && canDash && currentEnergy>=2)
         {
             isDashing = true;
-            //Sätt riktningen på dashen till 
-            mouseDirection = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition).normalized;
+            canDash = false;
+            //Se till så att riktningen på dashen är mot musen, kostar energi och varar lika länge som den ska 
+            mouseDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
             mouseDirection.z = 0;
             currentEnergy -= 2;
             dashDuration = 0;
             Debug.Log("Player is dashing in the direction of" + mouseDirection);
+            Debug.Log("current energy = " + currentEnergy);
         }
 
+        //Ett stadeie av "dashing" med en bestämd velocitet och riktning
         if (isDashing)
         {
-            rb.velocity = mouseDirection * dashVelocity;
+            rb.velocity = mouseDirection.normalized * dashVelocity;
             dashDuration += Time.deltaTime;
             
+            //avbryter dashing om den varat tiden ut
+            //OBS! Lägg till att den avbryts vid kontakt med marken
             if( dashDuration >= dashMaxDuration)
             {
                 isDashing=false;
+                canDash=true;
             }
         }
+
+        if (Input.GetKeyDown("p"))
+        {
+            GainEnergy(maxEnergy);
+        }
+
+
+
     }
 
     
