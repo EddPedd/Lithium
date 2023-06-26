@@ -58,8 +58,7 @@ public class PlayerMovement : MonoBehaviour
             //OBS! Lägg till att den avbryts vid kontakt med marken
             if( dashDuration >= dashMaxDuration)
             {
-                isDashing=false;
-                canDash=true;
+                CancelDashing();
             }
         }
 
@@ -67,11 +66,13 @@ public class PlayerMovement : MonoBehaviour
         {
             GainEnergy(maxEnergy);
         }
-
-
-
     }
 
-    
+    public void CancelDashing()
+    {
+        isDashing = false;
+        canDash = true;
+        rb.velocity = Vector2.zero;
+    }
 
 }

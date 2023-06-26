@@ -5,29 +5,26 @@ using UnityEngine;
 public class EnergyPlantScript : MonoBehaviour
 {
     public PlayerMovement playerM;
+    public GameObject player;
     
     // Start is called before the first frame update
     void Start()
     {
-        playerM = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
+        player = GameObject.FindWithTag("Player");
+        playerM = player.GetComponent<PlayerMovement>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void OnTriggerEnter(Collider collider )
-    {
-        if(collider.tag == "Player")
-        {
-            playerM.GainEnergy(10);
-            Debug.Log(collider.name + " triggered " + gameObject.name);
-        }
-        else
-        {
-            Debug.Log(collider.name + " collided with something that isn't the Player");
-        }
-    }
+    private void OnTriggerEnter2D(Collider2D collider )
+            {
+                if(collider.name == player.name)
+                {
+                    playerM.GainEnergy(10);
+                    Debug.Log(collider.name + " triggered " + gameObject.name);
+                    Destroy(gameObject);    
+                }
+                else
+                {
+                    Debug.Log(collider.name + " collided with something that isn't the Player");
+                }
+            }
 }
