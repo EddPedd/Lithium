@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!70 &63203791 stripped
+CapsuleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 8640340299507882414, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
+  m_PrefabInstance: {fileID: 8640340299045660949}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &228854588
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1829,17 +1834,37 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCharacter
       objectReference: {fileID: 0}
+    - target: {fileID: 8640340299507882409, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
+      propertyPath: cc
+      value: 
+      objectReference: {fileID: 63203791}
+    - target: {fileID: 8640340299507882409, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
+      propertyPath: someFloat
+      value: 0.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640340299507882409, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
+      propertyPath: gravityInt
+      value: 2000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640340299507882409, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
+      propertyPath: framesToCheck
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640340299507882409, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
+      propertyPath: wallClimbMaxDuration
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8640340299507882412, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
       propertyPath: m_RootOrder
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8640340299507882412, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.67
+      value: 0.93
       objectReference: {fileID: 0}
     - target: {fileID: 8640340299507882412, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.31
+      value: -3.08
       objectReference: {fileID: 0}
     - target: {fileID: 8640340299507882412, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1872,6 +1897,26 @@ PrefabInstance:
     - target: {fileID: 8640340299507882412, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640340299507882414, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
+      propertyPath: m_Size.x
+      value: 0.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640340299507882414, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
+      propertyPath: m_Size.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640340299507882414, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640340299507882414, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
+      propertyPath: m_Offset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640340299507882415, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
+      propertyPath: m_GravityScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
