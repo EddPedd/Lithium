@@ -6,10 +6,9 @@ public class PlayerMovement : MonoBehaviour
 {
     //Allmänna variabler
     public Rigidbody2D rb;
+    public CapsuleCollider2D cc;
     public int maxEnergy;
     public int currentEnergy;
-    private bool gravityBool = true;
-    public float gravityInt = 10f;
 
     //Vector för Musens position på skärmen
     private Vector3 mouseDirection;
@@ -21,11 +20,15 @@ public class PlayerMovement : MonoBehaviour
     private float dashDuration;
     public float dashMaxDuration;
     public Vector3 dashDirection;
+    private bool checkingFrames;
+    public int framesToCheck;
+    private int checkedFrames;
 
     //WallClimb variabler
     public bool isWallClimbing = false;
-    public float wallClimbDuration;
+    private float wallClimbDuration;
     public float wallClimbMaxDuration;
+    public float someFloat;
 
     void Start()
     {
@@ -45,20 +48,39 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        //Gravitation
-        if(gravityBool==true )
-        {
-            rb.velocity = Vector2.down * gravityInt;
-        }
-
         //Sätt igång "dash" om spelaren klickar på q
-        if(Input.GetKeyDown("q") && canDash && currentEnergy>=2)
+        if(Input.GetKeyDown("q") && currentEnergy>=2)
         {
-            mouseDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-            mouseDirection.z = 0;
-
-            StartDashing(mouseDirection, 2);
+            //Försök till att implementera stödframes att kolla inför dashen
+            checkingFrames = true;
         }
+
+        if (checkingFrames)
+        {
+            //Räkna antalet frames som letats
+            checkedFrames++;
+            Debug.Log("Checked if isDashing " + checkedFrames + " frames");
+
+            //Dasha mot musen om du klickat på "q" de senaste checkade framesen
+            if (canDash)
+            {
+                Debug.Log("Dashing as a result of pressing q");
+                mouseDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+                mouseDirection.z = 0;
+
+                StartDashing(mouseDirection, 2);
+                checkedFrames = 0;
+            }
+
+            //Om lika många frames har kollats som skas så slutar vi leta efter en dash och
+            //återställer antalet räknade checkade frames
+            if (checkedFrames >= framesToCheck)
+            {
+                checkingFrames = false;
+                checkedFrames = 0;
+            }
+        }
+
 
         //Ett stadeie av "dashing" med en bestämd velocitet och riktning
         if (isDashing)
@@ -79,6 +101,11 @@ public class PlayerMovement : MonoBehaviour
         if(isWallClimbing)
         {
             rb.velocity = new Vector3(0,0,0);
+            wallClimbDuration += Time.deltaTime;
+            if(wallClimbDuration >= wallClimbMaxDuration)
+            {
+                CancelWallClimb();
+            }
         }
 
         //Tillfällig testkod för att kunna ladda om med energi
@@ -109,6 +136,24 @@ public class PlayerMovement : MonoBehaviour
         isDashing = false;
         canDash = true;
         rb.velocity = Vector2.zero;
+
+        //Se om spelaren är nära en väg för att sätta igång wallclimb
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, someFloat);
+        foreach (Collider2D platforms in colliders)
+        {
+            Debug.Log("Checking for platforms to wallclimb onto after dash");
+            if(platforms.tag == "Platform")
+            {
+                WallClimb(false);
+            }
+        }
+    }
+
+    //Gizmo för ovan beskrivna PhysicsCircle 
+    private void OnDrawGizmos()
+    {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, someFloat);
     }
 
     //Kod för Wallclimb
@@ -157,24 +202,28 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    //Metod för att antingen sätta igång wallclimb eller göra en extra dash vid kontakt med väggen
     private void WallClimb(bool dashingIs)
     {
+        //Om man tar kontakt med väggen under "dash" så får man en ytterligare dash
         if (dashingIs)
         {
             StartDashing(Vector3.up, 0);
         }
+        //Om inte så får man vanlig Wallclimb
         else
         {
+            wallClimbDuration = 0;
             isWallClimbing = true;
-            gravityBool = false;
-
+            rb.gravityScale = 0;
         }
     }
 
+    //Metod som drar igång då man slutar wallclimba
     private void CancelWallClimb()
     {
         isWallClimbing=false;
-        gravityBool = true;
+        rb.gravityScale = 1;
     }
 
 }
