@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    //Allm‰nna variabler
+    //Allm√§nna variabler
     public Rigidbody2D rb;
     public CapsuleCollider2D cc;
     public int maxEnergy;
     public int currentEnergy;
+    public bool isGrounded = true;
 
-    //Vector fˆr Musens position pÂ sk‰rmen
+    //Vector f√∂r Musens position p√• sk√§rmen
     private Vector3 mouseDirection;
 
     //Dash-varabler
@@ -35,33 +36,29 @@ public class PlayerMovement : MonoBehaviour
         currentEnergy = maxEnergy;
     }
 
-    //Metod fˆr att Âterst‰lla energin fˆr rˆrelsefˆrmÂgor
-    public void GainEnergy (int amount)
-    {
-        currentEnergy += amount;
-        if(currentEnergy > maxEnergy)
-        {
-            currentEnergy = maxEnergy;
-        }
-        Debug.Log("CurrentEnergy =" +  currentEnergy);
-    }
 
     void Update()
     {
-        //S‰tt igÂng "dash" om spelaren klickar pÂ q
+        if (Input.GetKeyDown("a") && isGrounded)
+        {
+            
+        }
+        
+        
+        //S√§tt ig√•ng "dash" om spelaren klickar p√• q
         if(Input.GetKeyDown("q") && currentEnergy>=2)
         {
-            //Fˆrsˆk till att implementera stˆdframes att kolla infˆr dashen
+            //F√∂rs√∂k till att implementera st√∂dframes att kolla inf√∂r dashen
             checkingFrames = true;
         }
 
         if (checkingFrames)
         {
-            //R‰kna antalet frames som letats
+            //R√§kna antalet frames som letats
             checkedFrames++;
             Debug.Log("Checked if isDashing " + checkedFrames + " frames");
 
-            //Dasha mot musen om du klickat pÂ "q" de senaste checkade framesen
+            //Dasha mot musen om du klickat p√• "q" de senaste checkade framesen
             if (canDash)
             {
                 Debug.Log("Dashing as a result of pressing q");
@@ -72,8 +69,8 @@ public class PlayerMovement : MonoBehaviour
                 checkedFrames = 0;
             }
 
-            //Om lika mÂnga frames har kollats som skas sÂ slutar vi leta efter en dash och
-            //Âterst‰ller antalet r‰knade checkade frames
+            //Om lika m√•nga frames har kollats som skas s√• slutar vi leta efter en dash och
+            //√•terst√§ller antalet r√§knade checkade frames
             if (checkedFrames >= framesToCheck)
             {
                 checkingFrames = false;
@@ -82,15 +79,17 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
-        //Ett stadeie av "dashing" med en best‰md velocitet och riktning
+        //Ett stadeie av "dashing" med en best√§md velocitet och riktning
         if (isDashing)
         {
             //Egenskaperna av dashen
-            rb.velocity = dashDirection.normalized * dashVelocity;
+            //L√§gg till velocity och best√§m en helt ny riktning
+
+            rb.velocity = (rb.velocity + (Vector2)dashDirection).normalized * dashVelocity;
             dashDuration += Time.deltaTime;
             
             //avbryter dashing om den varat tiden ut
-            //OBS! L‰gg till att den avbryts vid kontakt med marken
+            //OBS! L√§gg till att den avbryts vid kontakt med marken
             if( dashDuration >= dashMaxDuration)
             {
                 CancelDashing();
@@ -108,20 +107,21 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        //Tillf‰llig testkod fˆr att kunna ladda om med energi
+        //Tillf√§llig testkod f√∂r att kunna ladda om med energi
         if (Input.GetKeyDown("p"))
         {
             GainEnergy(maxEnergy);
         }
     }
 
-    //Metod fˆr att s‰tta igÂng dash
+    //Metod f√∂r att s√§tta ig√•ng dash
     public void StartDashing(Vector3 direction, int cost)
     {
         isWallClimbing = false;
         isDashing = true;
         canDash = false;
-        //Se till sÂ att riktningen pÂ dashen ‰r mot musen, kostar energi och varar lika l‰nge som den ska 
+        rb.gravityScale = 1f;
+        //Se till s√• att riktningen p√• dashen √§r mot musen, kostar energi och varar lika l√§nge som den ska 
         dashDirection = direction;
         currentEnergy -= cost;
         dashDuration = 0;
@@ -130,14 +130,15 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    //Metod fˆr att avbryta dash och fˆr att gˆra saker som sker n‰r dashen avbryts
+    //Metod f√∂r att avbryta dash och f√∂r att g√∂ra saker som sker n√§r dashen avbryts
     public void CancelDashing()
     {
         isDashing = false;
         canDash = true;
-        rb.velocity = Vector2.zero;
+        Vector2 newVelocity = rb.velocity / 2;
+        rb.velocity = newVelocity;
 
-        //Se om spelaren ‰r n‰ra en v‰g fˆr att s‰tta igÂng wallclimb
+        //Se om spelaren √§r n√§ra en v√§g f√∂r att s√§tta ig√•ng wallclimb
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, someFloat);
         foreach (Collider2D platforms in colliders)
         {
@@ -149,18 +150,29 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    //Gizmo fˆr ovan beskrivna PhysicsCircle 
+    //Gizmo f√∂r ovan beskrivna PhysicsCircle 
     private void OnDrawGizmos()
     {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(transform.position, someFloat);
     }
 
-    //Kod fˆr Wallclimb
-    //Kod frÂn chatGBT fˆr att r‰kna ut vilken sida av en plattform som spelaren colliderar med fˆr att
+    //Metod f√∂r att √•terst√§lla energin f√∂r r√∂relsef√∂rm√•gor
+    public void GainEnergy(int amount)
+    {
+        currentEnergy += amount;
+        if (currentEnergy > maxEnergy)
+        {
+            currentEnergy = maxEnergy;
+        }
+        Debug.Log("CurrentEnergy =" + currentEnergy);
+    }
+
+    //Kod f√∂r Wallclimb
+    //Kod fr√•n chatGBT f√∂r att r√§kna ut vilken sida av en plattform som spelaren colliderar med f√∂r att
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //Se kollision med v‰gg och vilken sida av v‰ggen, ‰r det en sida sÂ vill vi wallclimba, om annars gˆr vi ingenting
+        //Se kollision med v√§gg och vilken sida av v√§ggen, √§r det en sida s√• vill vi wallclimba, om annars g√∂r vi ingenting
         if(collision.gameObject.tag == "Platform")
         {
             // Get the contact points of the collision
@@ -171,9 +183,14 @@ public class PlayerMovement : MonoBehaviour
             {
                 // Determine the collision side based on the normal vector of the contact point
                 Vector2 normal = contact.normal;
-                if(normal == Vector2.up || normal == Vector2.down)
+                if(normal == Vector2.down)
                 {
                     return;
+                }
+
+                if(normal == Vector2.up)
+                {
+                    isGrounded = true;
                 }
 
                 if (normal == Vector2.left)
@@ -202,15 +219,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    //Metod fˆr att antingen s‰tta igÂng wallclimb eller gˆra en extra dash vid kontakt med v‰ggen
+    //Allm√§nna 
+
+    //Metod f√∂r att antingen s√§tta ig√•ng wallclimb eller g√∂ra en extra dash vid kontakt med v√§ggen
     private void WallClimb(bool dashingIs)
     {
-        //Om man tar kontakt med v‰ggen under "dash" sÂ fÂr man en ytterligare dash
+        //Om man tar kontakt med v√§ggen under "dash" s√• f√•r man en ytterligare dash
         if (dashingIs)
         {
             StartDashing(Vector3.up, 0);
         }
-        //Om inte sÂ fÂr man vanlig Wallclimb
+        //Om inte s√• f√•r man vanlig Wallclimb
         else
         {
             wallClimbDuration = 0;
@@ -219,7 +238,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    //Metod som drar igÂng dÂ man slutar wallclimba
+    //Metod som drar ig√•ng d√• man slutar wallclimba
     private void CancelWallClimb()
     {
         isWallClimbing=false;

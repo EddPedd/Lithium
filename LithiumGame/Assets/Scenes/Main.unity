@@ -1852,7 +1852,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8640340299507882409, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
       propertyPath: wallClimbMaxDuration
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8640340299507882412, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
       propertyPath: m_RootOrder
@@ -1860,11 +1860,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8640340299507882412, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.93
+      value: 7.29
       objectReference: {fileID: 0}
     - target: {fileID: 8640340299507882412, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.08
+      value: -2.88
       objectReference: {fileID: 0}
     - target: {fileID: 8640340299507882412, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1916,7 +1916,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8640340299507882415, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
       propertyPath: m_GravityScale
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a11e2e386c0aee4a9b163101d3b3ae6, type: 3}
